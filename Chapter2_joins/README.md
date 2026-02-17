@@ -1,115 +1,201 @@
-## Topics Covered
+# Additional SQL Topics
 
+---
 
-### 1. Joins
-- **Cross Join**: Produces a Cartesian product of two tables. Useful for testing all possible combinations.  
-- **Inner Join**: Returns only the rows that have matching values in both tables. Can use aliases for clarity.  
-- **Outer Join**:  
-  - **Left Join**: Returns all rows from the left table, even if there is no match in the right table.  
-  - **Right Join**: Returns all rows from the right table, even if there is no match in the left table.  
-  - **Full Outer Join**: Combines left and right joins, returning all rows from both tables.  
-- **Self Join**: A table joins with itself to represent recursive relationships (e.g., employee-supervisor relationships).  
-- **Multi-table Joins**: Joining more than two tables requires a common field and typically `number of tables - 1` conditions in the `WHERE` clause.
+## 1. Joins
 
-### 2. Data Types
+### Types of Joins
 
-#### Numeric
-- **bit** – Boolean (0: false, 1: true)  
-- **tinyint** – 1 byte, range: -128 to +127  
-- **smallint** – 2 bytes, range: -32,767 to +32,767  
-- **int** – 4 bytes, range: -2^31 to 2^31-1  
-- **bigint** – 8 bytes, range: -2^63 to 2^63-1  
+- **Cross Join**  
+  Produces a Cartesian product of two tables. It returns all possible combinations of rows from both tables.
 
-#### Decimal & Money
-- **smallmoney** – 4 bytes, format: 0.0000 $  
-- **money** – 8 bytes, format: 0.0000 $  
-- **real** – 4 bytes, precision ~7 digits  
-- **float** – 8 bytes, precision ~15 digits  
-- **decimal / dec(precision, scale)** – e.g., `dec(5,2)` allows 5 digits with 2 decimals (123.44)  
+- **Inner Join**  
+  Returns only the rows that have matching values in both tables. Table aliases are commonly used for readability.
 
-#### Character / String
-- **char(n)** – fixed length string, n characters  
-- **varchar(n)** – variable length string, up to n characters  
-- **nchar(n)** – fixed length Unicode string  
-- **nvarchar(n)** – variable length Unicode string  
-- **nvarchar(max)** – up to 2 GB  
-- **text / ntext** – large objects  
+- **Outer Join**
+  - **Left Join (LEFT OUTER JOIN)**  
+    Returns all rows from the left table and matching rows from the right table. If no match exists, NULL values are returned for the right table.
+  - **Right Join (RIGHT OUTER JOIN)**  
+    Returns all rows from the right table and matching rows from the left table. If no match exists, NULL values are returned for the left table.
+  - **Full Outer Join**  
+    Returns all rows from both tables. Non-matching rows are filled with NULL values.
 
-#### Date & Time
-- **date** – MM/DD/YYYY  
-- **time** – hh:mm:ss[.fractional]  
-- **smalldatetime** – MM/DD/YYYY hh:mm:00, year 1900–2079  
-- **datetime** – MM/DD/YYYY hh:mm:ss.fff, year 1753–9999  
-- **datetime2(7)** – MM/DD/YYYY hh:mm:ss.ffffff, year 1–9999  
-- **datetimeoffset** – datetime with time zone  
-- **timestamp** – unique binary number, used for row versioning  
+- **Self Join**  
+  A table joins with itself. It is commonly used to represent hierarchical or recursive relationships (e.g., employee–manager relationships).
 
-#### Binary
-- **binary(n)** – fixed-length binary data  
-- **image** – large binary data (e.g., photos)  
+- **Multi-table Joins**  
+  Joining more than two tables requires a common relationship between tables. Typically, the number of join conditions equals `number of tables - 1`.
 
-#### Others
-- **sql_variant** – stores different SQL data types  
+---
+
+## 2. Data Types (SQL Server)
+
+### Numeric Types
+
+- **bit** – Boolean (0 = false, 1 = true)
+- **tinyint** – 1 byte, range: 0 to 255  
+- **smallint** – 2 bytes, range: -32,768 to 32,767  
+- **int** – 4 bytes, range: -2,147,483,648 to 2,147,483,647  
+- **bigint** – 8 bytes, range: -2^63 to 2^63 - 1  
+
+---
+
+### Decimal & Floating Types
+
+- **smallmoney** – 4 bytes, 4 decimal places  
+- **money** – 8 bytes, 4 decimal places  
+- **real** – 4 bytes, approximately 7-digit precision  
+- **float** – 8 bytes, approximately 15-digit precision  
+- **decimal(p, s)** / **numeric(p, s)**  
+  Example: `decimal(5,2)` allows 5 total digits with 2 digits after the decimal point (e.g., 123.45)
+
+---
+
+### Character / String Types
+
+- **char(n)** – Fixed-length string  
+- **varchar(n)** – Variable-length string  
+- **nchar(n)** – Fixed-length Unicode string  
+- **nvarchar(n)** – Variable-length Unicode string  
+- **nvarchar(max)** – Up to 2 GB  
+- **text / ntext** – Deprecated (use varchar(max) or nvarchar(max) instead)
+
+---
+
+### Date & Time Types
+
+- **date** – Date only  
+- **time** – Time only  
+- **smalldatetime** – 1900–2079, minutes precision  
+- **datetime** – 1753–9999, milliseconds precision  
+- **datetime2(7)** – 0001–9999, higher precision  
+- **datetimeoffset** – Date and time with time zone offset  
+- **timestamp (rowversion)** – Auto-generated binary number used for versioning (not a real date/time type)
+
+---
+
+### Binary Types
+
+- **binary(n)** – Fixed-length binary data  
+- **varbinary(n)** – Variable-length binary data  
+- **image** – Deprecated (use varbinary(max))
+
+---
+
+### Other Types
+
+- **sql_variant** – Stores multiple SQL data types  
 - **uniqueidentifier** – GUID  
 - **XML** – XML data  
-- **geography** – spatial data (maps)  
-- **hierarchyID** – hierarchical data  
+- **geography** – Spatial geographic data  
+- **hierarchyid** – Hierarchical data  
 
+---
 
+## 3. Keywords & Operators
 
-### 3. Keywords & Operators
-- **LIKE operator**: Pattern matching using `%` (zero or more chars), `_` (single char), `[ ]` (range or set), `[^ ]` (negation).  
-  - Examples:  
-    - `'a%'` – starts with a  
-    - `'%a'` – ends with a  
-    - `'___'` – exactly 3 characters  
-    - `'[(ah)(am)]%'` – starts with "ah" or "am"  
-    - `'%[_]%'` – contains underscore  
-- **ISNULL**: Replace NULL values with a default.  
+### LIKE Operator
 
+Used for pattern matching.
 
-### 4. Identity Columns
-- Automatically increment primary key: `IDENTITY(start, increment)`  
-- Can be manually inserted using `SET IDENTITY_INSERT <table> ON`  
-- Useful functions:  
-  - `@@IDENTITY` – last inserted identity in current session  
-  - `SCOPE_IDENTITY()` – last inserted identity in current scope  
-  - `IDENT_CURRENT('table')` – current identity value for a table  
-  - `IDENT_INCR('table')` – increment value  
-  - `IDENT_SEED('table')` – seed value  
-- Reset identity:  
+Wildcards:
+- `%` → zero or more characters  
+- `_` → exactly one character  
+- `[abc]` → matches any one character inside brackets  
+- `[^abc]` → matches any character NOT inside brackets  
+
+Examples:
+- `'a%'` → starts with "a"  
+- `'%a'` → ends with "a"  
+- `'___'` → exactly 3 characters  
+- `'[am]%'` → starts with "a" or "m"  
+- `'%[_]%'` → contains underscore  
+
+---
+
+### ISNULL
+
+Replaces NULL values with a specified default value.
+
+Example:
+```sql
+ISNULL(Salary, 0)
+```
+
+---
+
+## 4. Identity Columns
+
+Identity columns automatically generate incremented values.
+
+Syntax:
+```sql
+IDENTITY(seed, increment)
+```
+
+Example:
+```sql
+ID INT IDENTITY(1,1)
+```
+
+### Identity Functions
+
+- `@@IDENTITY` – Last inserted identity value in the current session  
+- `SCOPE_IDENTITY()` – Last inserted identity value in the current scope (recommended)  
+- `IDENT_CURRENT('table')` – Current identity value for a specific table  
+- `IDENT_INCR('table')` – Increment value  
+- `IDENT_SEED('table')` – Seed value  
+
+### Reset Identity
+
 ```sql
 DBCC CHECKIDENT('table_name', RESEED, 0)
+```
 
-### 5. DML with Joins
-- **UPDATE with join**: Update rows in one table based on related rows in another table.  
-- **DELETE with join**: Delete rows in one table based on conditions from another table.
+---
 
-### 6. Data Deletion and Truncation
-- `DELETE` → removes rows, can filter with WHERE.
-- `TRUNCATE` → removes all rows, resets identity, faster than DELETE.
-- `DROP TABLE` → removes table structure and data.
-- Differences:
-  - DELETE logs each row → can rollback.
-  - TRUNCATE minimal logging → cannot rollback, affects structure.
-  - Truncate is faster than delete because it bypasses logging and resets identity. 
+## 5. DML with Joins
 
-### 7. Null Handling
-- Use `IS NULL` / `IS NOT NULL` to filter nulls.  
-- Replace nulls with `ISNULL(column, value)` to avoid null-related issues.
+- **UPDATE with JOIN**  
+  Update records in one table based on matching records in another table.
 
+- **DELETE with JOIN**  
+  Delete records from one table based on related conditions in another table.
+
+---
+
+## 6. Data Deletion and Truncation
+
+- `DELETE` → Removes rows and supports WHERE clause.
+- `TRUNCATE TABLE` → Removes all rows, resets identity, and is faster than DELETE.
+- `DROP TABLE` → Removes the table structure and data permanently.
+
+### Key Differences
+
+- DELETE logs each row individually → Can be rolled back.
+- TRUNCATE uses minimal logging → Can be rolled back if inside a transaction.
+- TRUNCATE resets identity automatically.
+- DROP removes the entire table.
+
+---
+
+## 7. Null Handling
+
+- Use `IS NULL` or `IS NOT NULL` for filtering.
+- Use `ISNULL(column, value)` to replace NULL values.
+
+---
 
 ## 8. Foreign Keys & Cascading Rules
 
 ### Foreign Key Actions
 
-When a parent table row is deleted or updated, the action specified on the foreign key determines what happens to related child rows:
+When a parent row is deleted or updated, the foreign key action determines what happens to related child rows:
 
-| Action           | Delete Parent | Update Parent | Effect on Child Rows                 |
-|-----------------|---------------|---------------|------------------------------------|
-| NO ACTION/RESTRICT | Fail          | Fail          | Cannot delete/update parent if child exists |
-| CASCADE          | Delete child   | Update child  | Automatically propagate changes     |
-| SET NULL         | Child becomes NULL | Child becomes NULL | Foreign key in child set to NULL |
-| SET DEFAULT      | Child becomes default | Child becomes default | Foreign key set to default value |
+| Action              | On Delete      | On Update      | Effect on Child Rows |
+|--------------------|---------------|---------------|----------------------|
+| NO ACTION / RESTRICT | Prevent action | Prevent action | Parent cannot be deleted/updated if child exists |
+| CASCADE            | Delete child   | Update child   | Automatically propagates changes |
+| SET NULL           | Set to NULL    | Set to NULL    | Foreign key column becomes NULL |
+| SET DEFAULT        | Set to default | Set to default | Foreign key column becomes default value |
 
- 

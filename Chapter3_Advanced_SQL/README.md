@@ -1,12 +1,11 @@
 # Chapter 3: Advanced SQL Queries, Aggregations, and Built-in Functions
 
-This chapter focuses on advanced SQL concepts used for data analysis, reporting,
-and real-world database operations. It covers aggregation, grouping, subqueries,
-set operators, system functions, and conditional logic.
+This chapter focuses on advanced SQL concepts used for data analysis, reporting, and real-world database operations. It covers aggregation, grouping, subqueries, set operators, system functions, and conditional logic.
 
 ---
 
 ## 1. Aggregate Functions
+
 Aggregate functions are used for calculations and summarization over multiple rows.
 
 ### Common Aggregate Functions
@@ -31,6 +30,7 @@ Aggregate functions are used for calculations and summarization over multiple ro
 ---
 
 ## 2. GROUP BY Clause
+
 The GROUP BY clause is used to group rows that share the same values.
 
 ### Rules
@@ -40,12 +40,13 @@ The GROUP BY clause is used to group rows that share the same values.
 ---
 
 ## 3. WHERE vs HAVING
+
 Filtering data occurs at different stages in query execution.
 
-| Clause | Description |
-|------|------------|
-| WHERE | Filters rows before grouping |
-| HAVING | Filters groups after aggregation |
+| Clause  | Description                      |
+|----------|----------------------------------|
+| WHERE    | Filters rows before grouping     |
+| HAVING   | Filters groups after aggregation |
 
 ### Key Rules
 - WHERE cannot contain aggregate functions.
@@ -54,6 +55,7 @@ Filtering data occurs at different stages in query execution.
 ---
 
 ## 4. SQL Execution Order
+
 SQL queries do not execute in the order they are written.
 
 ### Actual Execution Order
@@ -71,6 +73,7 @@ Understanding this order explains why aliases cannot be used in the WHERE clause
 ---
 
 ## 5. Subqueries
+
 A subquery is a query nested inside another query.
 
 ### Key Concepts
@@ -88,6 +91,7 @@ A subquery is a query nested inside another query.
 ---
 
 ## 7. Set Operators
+
 Set operators combine results from multiple queries.
 
 ### Operators
@@ -104,6 +108,7 @@ Set operators combine results from multiple queries.
 ---
 
 ## 8. System and Metadata Functions
+
 Used to retrieve database and system information.
 
 ### Examples
@@ -116,6 +121,7 @@ Used to retrieve database and system information.
 ---
 
 ## 9. Date and Time Functions
+
 Used for date calculations and formatting.
 
 ### Topics Covered
@@ -129,6 +135,7 @@ Used for date calculations and formatting.
 ---
 
 ## 10. NULL Handling Functions
+
 Handling NULL values is essential in database systems.
 
 ### Functions
@@ -140,35 +147,37 @@ COALESCE is preferred when multiple fallback values are required.
 
 ### Main Differences Between ISNULL and COALESCE
 
-| Feature               | ISNULL                     | COALESCE                          |
-|-----------------------|----------------------------|----------------------------------|
-| Number of arguments    | Only 2                     | 2 or more                        |
-| Return type            | Type of **first argument** | Type with **highest precedence** among all arguments |
-| ANSI standard          | SQL Server specific        | Standard SQL (works in many databases) |
-| Multiple fallbacks     | Not possible               | Yes                              |
+| Feature                | ISNULL                          | COALESCE                                                  |
+|------------------------|----------------------------------|-----------------------------------------------------------|
+| Number of arguments    | Only 2                          | 2 or more                                                 |
+| Return type            | Type of first argument          | Type with highest precedence among all arguments          |
+| ANSI standard          | SQL Server specific             | Standard SQL (works in many databases)                    |
+| Multiple fallbacks     | Not possible                    | Yes                                                       |
 
 ### COALESCE Return Type Behavior
+- COALESCE returns a single data type determined by highest precedence among its arguments.
+- Simplified precedence: `int > decimal > float > datetime > nvarchar`
+- Example: if one argument is int and another is nvarchar, SQL Server tries to convert the string to int, which can cause errors.
 
-- COALESCE returns a **single data type**, determined by **highest precedence** among its arguments.  
-- Simplified precedence: `int > decimal > float > datetime > nvarchar`  
-- Example: if one argument is `int` and another is `nvarchar`, SQL Server tries to convert the string to int, which can cause errors.
 ### COALESCE Data Type Tip
-- All arguments should be **the same data type**.  
-- If types differ, SQL Server converts to the **highest-precedence type**, which can cause errors.  
+- All arguments should be the same data type.
+- If types differ, SQL Server converts to the highest-precedence type, which can cause errors.
 - Example: cast integers to strings if mixed with text:
 
 ```sql
 COALESCE(CAST(Dept_Manager AS NVARCHAR(100)), Dept_Name, 'No data')
+```
 
+### ISNULL Behavior
+- ISNULL(expr1, expr2)
+  - Returns the same type as the first argument.
+  - Only works with 2 arguments.
+  - SQL Server does not use type precedence beyond the first argument.
 
-- **ISNULL(expr1, expr2)**  
-  - Returns the **same type as the first argument**.  
-  - Only works with **2 arguments**.  
-  - SQL Server **does not use type precedence** beyond the first argument.
-
-
+---
 
 ## 11. String Functions
+
 Used for text manipulation and formatting.
 
 ### Categories
@@ -183,6 +192,7 @@ CONCAT safely handles NULL values and converts all inputs to strings.
 ---
 
 ## 12. String and Array Conversion
+
 Modern SQL supports converting between strings and arrays.
 
 ### Concepts
@@ -193,6 +203,7 @@ Modern SQL supports converting between strings and arrays.
 ---
 
 ## 13. Mathematical Functions
+
 Used for numeric calculations.
 
 ### Examples
@@ -205,6 +216,7 @@ Used for numeric calculations.
 ---
 
 ## 14. Logical and Conditional Functions
+
 Used to apply conditions within queries.
 
 ### Functions
@@ -217,6 +229,7 @@ These are commonly used for categorization and conditional updates.
 ---
 
 ## 15. Conditional Updates
+
 Update statements can apply different logic based on conditions.
 
 ### Use Cases
@@ -227,6 +240,5 @@ Update statements can apply different logic based on conditions.
 ---
 
 ## Chapter Summary
-This chapter transitions from basic SQL usage to advanced querying techniques,
-focusing on performance, correctness, and real-world database scenarios.
-It is essential for exams and professional database development.
+
+This chapter transitions from basic SQL usage to advanced querying techniques, focusing on performance, correctness, and real-world database scenarios. It is essential for exams and professional database development.
