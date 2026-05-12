@@ -1,4 +1,4 @@
-## What `TOP` Does
+# What `TOP` Does
 
 `TOP(n)` selects the first `n` rows from the result set.
 
@@ -100,9 +100,6 @@ FROM Students;
 
 SQL requires `ORDER BY` when using `WITH TIES`.
 
-# SQL Notes
-
----
 
 # Creating an Empty Table Using `SELECT INTO`
 
@@ -153,9 +150,6 @@ But it will NOT copy:
 
 ---
 
-# Understanding `UNIQUEIDENTIFIER` and `DEFAULT NEWID()`
-
----
 
 # `UNIQUEIDENTIFIER`
 
@@ -336,35 +330,9 @@ Useful when:
 Server.Database.Schema.Table
 ```
 
-
-#  SQL Window Functions & Grouping Guide
-
-A complete, beginner-friendly guide to **SQL window functions**, ranking, and the difference between `GROUP BY` and `PARTITION BY`.
-
 ---
 
-#  Table of Contents
-
--  [Introduction](#-introduction)
--  [Window Functions Basics](#️-window-functions-basics)
--  [Core Concepts](#-core-concepts)
--  [Ranking Functions](#-ranking-functions)
-  - ROW_NUMBER()
-  - RANK()
-  - DENSE_RANK()
-  - NTILE()
-- [Analytical Functions](#-analytical-functions)
-  - LAG()
-  - LEAD()
-  - FIRST_VALUE()
-  - LAST_VALUE()
-  - PERCENT_RANK()
--  [GROUP BY vs PARTITION BY](#️-group-by-vs-partition-by)
--  [Quick Summary](#-quick-summary)
-
----
-
-#  Introduction
+#  Window Functions
 
 SQL window functions allow you to perform calculations **across related rows without collapsing the result set**.
 
@@ -372,7 +340,6 @@ Unlike `GROUP BY`, window functions keep all rows and add extra computed columns
 
 ---
 
-#  Window Functions Basics
 
 ##  Syntax
 
@@ -423,7 +390,7 @@ ROW_NUMBER() OVER (
 )
 ```
 
-### ✔ Features:
+###  Features:
 - always unique
 - restarts per partition
 
@@ -474,7 +441,7 @@ NTILE(3) OVER (ORDER BY Crs_Duration)
 
 ---
 
-## ⬅ LAG()
+##  LAG()
 
 Gets the previous row value.
 
@@ -486,7 +453,7 @@ LAG(Crs_Name) OVER (ORDER BY Top_Id)
 
 ---
 
-## ➡️ LEAD()
+##  LEAD()
 
 Gets the next row value.
 
@@ -498,7 +465,7 @@ LEAD(Crs_Name) OVER (ORDER BY Top_Id)
 
 ---
 
-## 🔝 FIRST_VALUE()
+##  FIRST_VALUE()
 
 Returns the first value in the window.
 
@@ -510,7 +477,7 @@ FIRST_VALUE(Crs_Name) OVER (ORDER BY Top_Id)
 
 ---
 
-## 🔚 LAST_VALUE()
+##  LAST_VALUE()
 
 Returns the last value in the window.
 
@@ -598,8 +565,8 @@ DECIMAL(18,2)
 1234567890123456.78
 ```
 
-✔ Total digits = 18  
-✔ Decimal digits = 2  
+ Total digits = 18  
+ Decimal digits = 2  
 
 ---
 
@@ -855,33 +822,6 @@ This section explains advanced SQL aggregation techniques used in analytical que
 
 ---
 
-#  Sample Table
-
-```sql
-CREATE TABLE sales (
-    Productid INT,
-    salesmanname VARCHAR(10),
-    quantity INT
-);
-```
-
----
-
-#  Sample Data
-
-```sql
-INSERT INTO sales VALUES
-(1,'ahmed',10),
-(1,'khalid',20),
-(2,'omar',30),
-(4,'ramez',50),
-(5,'ramy',555),
-(6,'khalid',50),
-(4,'ramy',55);
-```
-
----
-
 #  1. GROUPING SETS
 
 ##  Idea
@@ -1100,7 +1040,7 @@ UNPIVOT (
 
 ---
 
-## 💡 Meaning
+##  Meaning
 
 | Column | becomes |
 |--------|--------|
