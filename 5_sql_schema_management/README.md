@@ -97,9 +97,7 @@ That is why this is invalid:
 SELECT TOP(3) WITH TIES *
 FROM Students;
 ```
-
 SQL requires `ORDER BY` when using `WITH TIES`.
-
 
 # Creating an Empty Table Using `SELECT INTO`
 
