@@ -1,4 +1,3 @@
--- 01_select_top_examples.sql
 -- Demonstrates how to select the top N rows from a table
 
 -- Select the first 2 rows

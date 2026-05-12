@@ -1,4 +1,3 @@
--- 02_random_selection.sql
 -- Demonstrates how to select rows in random order using NEWID()
 
 -- Add a random unique identifier to each row
@@ -12,3 +11,11 @@ ORDER BY RandomID;
 SELECT TOP(1) *
 FROM Students
 ORDER BY NEWID();
+
+-- Create a table
+
+create table trial
+(
+userid uniqueidentifier primary key default Newid(), 
+username varchar(20)
+)

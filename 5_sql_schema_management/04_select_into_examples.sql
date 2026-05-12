@@ -1,4 +1,3 @@
--- 05_select_into_examples.sql
 -- Demonstrates creating new tables from SELECT statements
 
 -- Create a new table with all columns

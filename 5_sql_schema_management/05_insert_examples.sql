@@ -1,4 +1,3 @@
--- 06_insert_examples.sql
 -- Demonstrates different ways to insert data
 
 -- Create a simple table
