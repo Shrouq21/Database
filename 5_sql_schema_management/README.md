@@ -1,5 +1,3 @@
-# Why `ORDER BY` Is Required with `WITH TIES`
-
 ## What `TOP` Does
 
 `TOP(n)` selects the first `n` rows from the result set.
@@ -525,7 +523,7 @@ LAST_VALUE(Crs_Name) OVER (
 )
 ```
 
-👉 Ensures SQL considers the entire partition.
+ Ensures SQL considers the entire partition.
 
 ---
 
@@ -554,6 +552,101 @@ PERCENT_RANK() OVER (ORDER BY grade)
 | 4    | 0.6    |
 | 5    | 0.8    |
 | 6    | 1.0    |
+
+
+#  DECIMAL(p, s) in SQL
+
+The `DECIMAL` (or `NUMERIC`) data type is used to store numbers with exact precision, especially in financial and analytical calculations.
+
+---
+
+#  Syntax
+
+```sql
+DECIMAL(precision, scale)
+```
+
+---
+
+# Meaning of Parameters
+
+##  Precision (p)
+
+- Total number of digits allowed
+- Includes digits before and after the decimal point
+
+##  Scale (s)
+
+- Number of digits allowed **after the decimal point**
+
+---
+
+#  Example: DECIMAL(18,2)
+```sql
+DECIMAL(18,2)
+```
+
+### Meaning:
+- 18 total digits
+- 2 digits after the decimal point
+
+---
+
+### Example Value:
+
+```
+1234567890123456.78
+```
+
+✔ Total digits = 18  
+✔ Decimal digits = 2  
+
+---
+
+#  Simple Intuition
+
+Think of it like a box:
+
+```
+[__________________].[__]
+   18 total digits     2 decimals
+```
+
+- Left side → whole number part
+- Right side → decimal part
+
+---
+
+#  Why 18 is commonly used
+
+- Standard size in SQL Server
+- Safe for financial and percentage calculations
+- Supports large numbers without overflow
+
+---
+
+#  More Examples
+
+## DECIMAL(5,2)
+
+```
+123.45
+```
+
+## DECIMAL(10,3)
+
+```
+1234567.890
+```
+
+---
+
+#  Important Note
+
+If you exceed the precision:
+
+- SQL will throw an error
+- or truncate the value depending on configuration
 
 ---
 
@@ -607,13 +700,13 @@ FROM course;
 
 | Feature | GROUP BY | PARTITION BY |
 |--------|----------|--------------|
-| Keeps rows | ❌ No | ✅ Yes |
+| Keeps rows |  No |  Yes |
 | Output type | Summary | Detailed |
 | Used with | Aggregates | Window functions |
 
 ---
 
-# 🧠 Quick Summary
+#  Quick Summary
 
 -  `GROUP BY` → compress data
 -  `PARTITION BY` → analyze data without losing rows
@@ -622,3 +715,416 @@ FROM course;
 
 ---
  
+#  SQL MERGE Statement (Update + Insert in One Query)
+
+The `MERGE` statement is used to **synchronize two tables** by performing:
+- UPDATE existing rows
+- INSERT new rows
+
+All in a single query.
+
+---
+
+#  Idea
+
+> Compare two tables and decide:
+- If a row exists → update it
+- If a row does not exist → insert it
+
+---
+
+#  Tables Used
+
+##  Target Table (Main Table)
+
+```sql
+lastt
+```
+
+##  Source Table (New Data)
+
+```sql
+dailyt
+```
+
+---
+
+#  MERGE Syntax
+
+```sql
+MERGE INTO lastt AS T
+USING dailyt AS S
+ON T.Lid = S.dlid
+```
+
+---
+
+#  Step 1: Matching Condition
+
+```sql
+ON T.Lid = S.dlid
+```
+
+ This is the key comparison rule:
+> Match rows using IDs
+
+---
+
+#  Step 2: WHEN MATCHED → UPDATE
+
+```sql
+WHEN MATCHED THEN
+UPDATE
+SET T.lvalue = T.lvalue + S.dvalue
+```
+
+### Meaning:
+
+If the row exists in BOTH tables:
+- Update the existing value
+- Add new value to old value
+
+---
+
+### Example:
+
+Before:
+
+| Lid | Value |
+|-----|-------|
+| 1   | 10    |
+
+Source:
+
+| dlid | value |
+|------|-------|
+| 1    | 5     |
+
+After:
+
+| Lid | Value |
+|-----|-------|
+| 1   | 15    |
+
+---
+
+#  Step 3: WHEN NOT MATCHED → INSERT
+
+```sql
+WHEN NOT MATCHED THEN
+INSERT VALUES (S.dlid, S.dname, S.dvalue)
+```
+
+### Meaning:
+
+If row exists in source but NOT in target:
+> Insert it into target table
+
+---
+
+#  Step 4: OUTPUT Clause
+
+```sql
+OUTPUT $action;
+```
+
+### Meaning:
+
+Shows what SQL did:
+
+| Action |
+|--------|
+| INSERT |
+| UPDATE |
+
+---
+
+#  Execution Flow
+
+For each row in `dailyt`:
+
+1. Check if ID exists in `lastt`
+2. If YES → UPDATE
+3. If NO → INSERT
+
+---
+
+#  SQL OLAP Operations (Grouping Sets, Rollup, Cube, Pivot, Unpivot)
+
+This section explains advanced SQL aggregation techniques used in analytical queries.
+
+---
+
+#  Sample Table
+
+```sql
+CREATE TABLE sales (
+    Productid INT,
+    salesmanname VARCHAR(10),
+    quantity INT
+);
+```
+
+---
+
+#  Sample Data
+
+```sql
+INSERT INTO sales VALUES
+(1,'ahmed',10),
+(1,'khalid',20),
+(2,'omar',30),
+(4,'ramez',50),
+(5,'ramy',555),
+(6,'khalid',50),
+(4,'ramy',55);
+```
+
+---
+
+#  1. GROUPING SETS
+
+##  Idea
+
+Run multiple GROUP BY queries in one statement.
+
+---
+
+## Example
+
+```sql
+SELECT Productid AS pid, SUM(quantity) AS quantities
+FROM sales
+GROUP BY GROUPING SETS (Productid, salesmanname);
+```
+
+---
+
+##  Meaning
+
+This is equivalent to:
+
+```sql
+GROUP BY Productid
+UNION ALL
+GROUP BY salesmanname
+```
+
+---
+
+##  Output logic
+
+- One aggregation per Productid
+- One aggregation per salesmanname
+
+---
+
+#  2. GROUPING() Function
+
+```sql
+GROUPING(salesmanname)
+GROUPING(productid)
+```
+
+---
+
+##  Meaning
+
+| Value | Meaning |
+|------|--------|
+| 0 | real value |
+| 1 | aggregated (NULL due to grouping) |
+
+---
+
+##  Why useful?
+
+It helps you detect:
+- real rows
+- summary rows
+
+---
+
+# 🔷 3. ROLLUP
+
+```sql
+GROUP BY ROLLUP(salesmanname, productid)
+```
+
+---
+
+##  Idea
+
+Creates hierarchical aggregation:
+
+```text
+Level 1: salesmanname + productid
+Level 2: salesmanname total
+Level 3: grand total
+```
+
+---
+
+## Equivalent:
+
+```sql
+GROUP BY salesmanname, productid
+UNION
+GROUP BY salesmanname
+UNION
+GROUP BY ()
+```
+
+---
+
+# 🔷 4. CUBE
+
+```sql
+GROUP BY CUBE(salesmanname, productid)
+```
+
+---
+
+##  Idea
+
+Generates **ALL combinations** of grouping:
+
+- salesmanname
+- productid
+- both
+- none
+
+---
+
+## Equivalent (conceptually):
+
+```text
+GROUP BY A, B
+GROUP BY A
+GROUP BY B
+GROUP BY ()
+```
+
+---
+
+##  Difference from ROLLUP
+
+| Feature | ROLLUP | CUBE |
+|--------|--------|------|
+| Type | Hierarchical | All combinations |
+| Output | Less rows | More rows |
+
+---
+
+#  5. PIVOT
+
+##  Idea
+
+Turns rows into columns.
+
+---
+
+## Example
+
+```sql
+SELECT *
+FROM sales
+PIVOT (
+    SUM(quantity)
+    FOR salesmanname IN ([ahmed],[khalid],[omar])
+) AS pvt;
+```
+
+---
+
+##  Meaning
+
+| salesmanname | becomes |
+|-------------|--------|
+| ahmed       | column |
+| khalid      | column |
+| omar        | column |
+
+---
+
+## Result shape
+
+| Productid | ahmed | khalid | omar |
+|----------|------|--------|------|
+
+---
+
+#  6. PIVOT with Derived Table
+
+```sql
+SELECT *
+FROM (
+    SELECT CAST(productid AS VARCHAR(10)) AS productid,
+           salesmanname,
+           quantity
+    FROM sales
+) AS t
+PIVOT (
+    SUM(quantity)
+    FOR salesmanname IN ([ahmed],[ali],[khalid])
+) AS pvt;
+```
+
+---
+
+##  Why subquery?
+
+Because:
+> PIVOT requires a clean dataset format
+
+---
+
+# 7. UNPIVOT
+
+##  Idea
+
+Opposite of PIVOT:
+> Converts columns → rows
+
+---
+
+## Example
+
+```sql
+SELECT *
+FROM ntable
+UNPIVOT (
+    qty FOR sal IN ([ahmed],[khalid],[ali])
+) AS unpvt;
+```
+
+---
+
+## 💡 Meaning
+
+| Column | becomes |
+|--------|--------|
+| ahmed | row |
+| khalid | row |
+| ali | row |
+
+---
+
+## Result shape
+
+| productid | sal | qty |
+|----------|-----|-----|
+
+---
+
+#  Summary Table
+
+| Feature | Purpose |
+|--------|--------|
+| GROUPING SETS | multiple GROUP BY in one query |
+| ROLLUP | hierarchical totals |
+| CUBE | all combinations |
+| PIVOT | rows → columns |
+| UNPIVOT | columns → rows |
+
+---
