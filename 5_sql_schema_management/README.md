@@ -123,7 +123,6 @@ is always false.
   - no rows are copied
   - but SQL still creates the table structure.
 
----
 
 ## What Gets Copied?
 
@@ -158,7 +157,7 @@ It is commonly used when strong uniqueness is needed instead of sequential integ
 1, 2, 3, 4
 ```
 
----
+
 
 ## Example GUID
 
@@ -230,7 +229,7 @@ Since no `userid` was provided:
 - useful for replication and synchronization
 - avoids ID collisions between databases
 
----
+
 
 ## Disadvantages
 
@@ -350,7 +349,7 @@ Splits data into groups (without removing rows).
 
 
 
-### 🔹 ORDER BY (inside OVER)
+###  ORDER BY (inside OVER)
 Defines order inside each group.
 
 Used for:
@@ -362,7 +361,7 @@ Used for:
 
 #  Ranking Functions
 
----
+
 
 ##  ROW_NUMBER()
 
@@ -924,7 +923,7 @@ GROUP BY B
 GROUP BY ()
 ```
 
----
+
 
 ##  Difference from ROLLUP
 
@@ -954,7 +953,7 @@ PIVOT (
 ) AS pvt;
 ```
 
----
+
 
 ##  Meaning
 
@@ -971,7 +970,7 @@ PIVOT (
 | Productid | ahmed | khalid | omar |
 |----------|------|--------|------|
 
----
+
 
 #  6. PIVOT with Derived Table
 
