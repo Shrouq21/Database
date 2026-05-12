@@ -11,8 +11,6 @@ FROM Students;
 
 This returns any 3 rows based on the database's current retrieval order.
 
----
-
 ## Why `ORDER BY` Is Important
 
 A database table has no guaranteed order unless `ORDER BY` is used.
@@ -36,8 +34,6 @@ This means:
 
 1. Sort students by age from highest to lowest.
 2. Return the first 3 rows.
-
----
 
 ## What `WITH TIES` Does
 
@@ -80,7 +76,6 @@ Final result:
 | Mona | 24  |
 | Adam | 24  |
 
----
 
 ## Why `WITH TIES` Requires `ORDER BY`
 
@@ -103,7 +98,7 @@ SQL requires `ORDER BY` when using `WITH TIES`.
 
 You can create a new table with the same structure as an existing table without copying any data by using a condition that is always false.
 
----
+
 
 ## Example
 
@@ -112,8 +107,6 @@ SELECT * INTO EmptyStudents
 FROM Students
 WHERE 1 = 2;
 ```
-
----
 
 ## How It Works
 
@@ -179,7 +172,7 @@ It is commonly used when strong uniqueness is needed instead of sequential integ
 
 `NEWID()` is a SQL Server function that generates a random GUID every time it is called.
 
----
+
 
 ## Example
 
@@ -193,13 +186,13 @@ Possible output:
 6F9619FF-8B86-D011-B42D-00CF4FC964FF
 ```
 
----
+
 
 # `DEFAULT NEWID()`
 
 When used with `DEFAULT`, SQL Server automatically generates a GUID if no value is provided during insertion.
 
----
+
 
 ## Example Table
 
@@ -211,7 +204,6 @@ CREATE TABLE MyUsers (
 );
 ```
 
----
 
 ## Example Insert
 
@@ -228,7 +220,6 @@ Since no `userid` was provided:
 - SQL Server automatically calls `NEWID()`
 - a unique GUID is inserted into `userid`
 
----
 
 # Why Use GUIDs?
 
@@ -266,7 +257,6 @@ SELECT *
 FROM [LAPTOP-GPED28K3].[ITI].HR.Student;
 ```
 
----
 
 # Order Explanation
 
@@ -277,19 +267,17 @@ FROM [LAPTOP-GPED28K3].[ITI].HR.Student;
 | `HR` | Schema Name |
 | `Student` | Table Name |
 
----
 
 # Important Notes
 
 ## Server Name
 Represents the SQL Server instance.
 
----
 
 ## Database Name
 The database containing the table.
 
----
+
 
 ## Schema Name
 A logical container used to organize database objects.
@@ -299,12 +287,12 @@ Common schemas:
 - `HR`
 - `Sales`
 
----
+
 
 ## Table Name
 The actual table being queried.
 
----
+
 
 # Why Use Fully Qualified Names?
 
@@ -314,7 +302,7 @@ Useful when:
 - avoiding ambiguity between objects
 - organizing large systems
 
----
+
 
 # Summary
 
@@ -336,7 +324,7 @@ SQL window functions allow you to perform calculations **across related rows wit
 
 Unlike `GROUP BY`, window functions keep all rows and add extra computed columns.
 
----
+
 
 
 ##  Syntax
@@ -348,20 +336,19 @@ FUNCTION() OVER (
 )
 ```
 
----
 
 ##  Key Parts
 
 ###  OVER()
 Defines a window function.
 
----
+
 
 ###  PARTITION BY
 Splits data into groups (without removing rows).
 
 
----
+
 
 ### 🔹 ORDER BY (inside OVER)
 Defines order inside each group.
@@ -371,7 +358,7 @@ Used for:
 - sequencing
 - comparisons between rows
 
----
+
 
 #  Ranking Functions
 
@@ -392,7 +379,7 @@ ROW_NUMBER() OVER (
 - always unique
 - restarts per partition
 
----
+
 
 ##  RANK()
 
@@ -407,7 +394,7 @@ RANK() OVER (ORDER BY salary DESC)
 1, 1, 3, 4
 ```
 
----
+
 
 ##  DENSE_RANK()
 
@@ -418,7 +405,7 @@ Like `RANK()` but without gaps.
 1, 1, 2, 3
 ```
 
----
+
 
 ##  NTILE(n)
 
@@ -437,7 +424,7 @@ NTILE(3) OVER (ORDER BY Crs_Duration)
 
 #  Analytical Functions
 
----
+
 
 ##  LAG()
 
@@ -449,7 +436,7 @@ LAG(Crs_Name) OVER (ORDER BY Top_Id)
 
  “What was before me?”
 
----
+
 
 ##  LEAD()
 
@@ -461,7 +448,7 @@ LEAD(Crs_Name) OVER (ORDER BY Top_Id)
 
  “What comes after me?”
 
----
+
 
 ##  FIRST_VALUE()
 
@@ -473,7 +460,7 @@ FIRST_VALUE(Crs_Name) OVER (ORDER BY Top_Id)
 
  Always returns the first row in the ordered window.
 
----
+
 
 ##  LAST_VALUE()
 
@@ -490,7 +477,7 @@ LAST_VALUE(Crs_Name) OVER (
 
  Ensures SQL considers the entire partition.
 
----
+
 
 ##  PERCENT_RANK()
 
@@ -505,7 +492,7 @@ PERCENT_RANK() OVER (ORDER BY grade)
 (rank - 1) / (total_rows - 1)
 ```
 
----
+
 
 ### Example (6 rows):
 
@@ -523,7 +510,7 @@ PERCENT_RANK() OVER (ORDER BY grade)
 
 The `DECIMAL` (or `NUMERIC`) data type is used to store numbers with exact precision, especially in financial and analytical calculations.
 
----
+
 
 #  Syntax
 
@@ -531,7 +518,6 @@ The `DECIMAL` (or `NUMERIC`) data type is used to store numbers with exact preci
 DECIMAL(precision, scale)
 ```
 
----
 
 # Meaning of Parameters
 
@@ -544,7 +530,7 @@ DECIMAL(precision, scale)
 
 - Number of digits allowed **after the decimal point**
 
----
+
 
 #  Example: DECIMAL(18,2)
 ```sql
@@ -555,7 +541,7 @@ DECIMAL(18,2)
 - 18 total digits
 - 2 digits after the decimal point
 
----
+
 
 ### Example Value:
 
@@ -566,7 +552,6 @@ DECIMAL(18,2)
  Total digits = 18  
  Decimal digits = 2  
 
----
 
 #  Simple Intuition
 
@@ -580,7 +565,6 @@ Think of it like a box:
 - Left side → whole number part
 - Right side → decimal part
 
----
 
 #  Why 18 is commonly used
 
@@ -588,7 +572,7 @@ Think of it like a box:
 - Safe for financial and percentage calculations
 - Supports large numbers without overflow
 
----
+
 
 #  More Examples
 
@@ -617,7 +601,7 @@ If you exceed the precision:
 
 #  GROUP BY vs PARTITION BY
 
----
+
 
 ##  GROUP BY
 
@@ -638,7 +622,7 @@ GROUP BY Crs_Duration;
 
  One row per group
 
----
+
 
 ##  PARTITION BY
 
@@ -659,7 +643,7 @@ FROM course;
 
  Same rows + extra info
 
----
+
 
 ##  Key Difference
 
@@ -669,7 +653,6 @@ FROM course;
 | Output type | Summary | Detailed |
 | Used with | Aggregates | Window functions |
 
----
 
 #  Quick Summary
 
@@ -688,7 +671,7 @@ The `MERGE` statement is used to **synchronize two tables** by performing:
 
 All in a single query.
 
----
+
 
 #  Idea
 
@@ -696,7 +679,7 @@ All in a single query.
 - If a row exists → update it
 - If a row does not exist → insert it
 
----
+
 
 #  Tables Used
 
@@ -712,7 +695,7 @@ lastt
 dailyt
 ```
 
----
+
 
 #  MERGE Syntax
 
@@ -722,7 +705,7 @@ USING dailyt AS S
 ON T.Lid = S.dlid
 ```
 
----
+
 
 #  Step 1: Matching Condition
 
@@ -733,7 +716,7 @@ ON T.Lid = S.dlid
  This is the key comparison rule:
 > Match rows using IDs
 
----
+
 
 #  Step 2: WHEN MATCHED → UPDATE
 
@@ -749,7 +732,7 @@ If the row exists in BOTH tables:
 - Update the existing value
 - Add new value to old value
 
----
+
 
 ### Example:
 
@@ -771,7 +754,7 @@ After:
 |-----|-------|
 | 1   | 15    |
 
----
+
 
 #  Step 3: WHEN NOT MATCHED → INSERT
 
@@ -785,7 +768,7 @@ INSERT VALUES (S.dlid, S.dname, S.dvalue)
 If row exists in source but NOT in target:
 > Insert it into target table
 
----
+
 
 #  Step 4: OUTPUT Clause
 
@@ -818,7 +801,7 @@ For each row in `dailyt`:
 
 This section explains advanced SQL aggregation techniques used in analytical queries.
 
----
+
 
 #  1. GROUPING SETS
 
@@ -826,7 +809,7 @@ This section explains advanced SQL aggregation techniques used in analytical que
 
 Run multiple GROUP BY queries in one statement.
 
----
+
 
 ## Example
 
@@ -836,7 +819,7 @@ FROM sales
 GROUP BY GROUPING SETS (Productid, salesmanname);
 ```
 
----
+
 
 ##  Meaning
 
@@ -848,14 +831,13 @@ UNION ALL
 GROUP BY salesmanname
 ```
 
----
+
 
 ##  Output logic
 
 - One aggregation per Productid
 - One aggregation per salesmanname
 
----
 
 #  2. GROUPING() Function
 
@@ -864,7 +846,7 @@ GROUPING(salesmanname)
 GROUPING(productid)
 ```
 
----
+
 
 ##  Meaning
 
@@ -873,7 +855,7 @@ GROUPING(productid)
 | 0 | real value |
 | 1 | aggregated (NULL due to grouping) |
 
----
+
 
 ##  Why useful?
 
@@ -881,7 +863,7 @@ It helps you detect:
 - real rows
 - summary rows
 
----
+
 
 # 🔷 3. ROLLUP
 
@@ -889,7 +871,7 @@ It helps you detect:
 GROUP BY ROLLUP(salesmanname, productid)
 ```
 
----
+
 
 ##  Idea
 
@@ -901,7 +883,7 @@ Level 2: salesmanname total
 Level 3: grand total
 ```
 
----
+
 
 ## Equivalent:
 
@@ -913,15 +895,14 @@ UNION
 GROUP BY ()
 ```
 
----
 
-# 🔷 4. CUBE
+#  4. CUBE
 
 ```sql
 GROUP BY CUBE(salesmanname, productid)
 ```
 
----
+
 
 ##  Idea
 
@@ -932,7 +913,7 @@ Generates **ALL combinations** of grouping:
 - both
 - none
 
----
+
 
 ## Equivalent (conceptually):
 
@@ -952,7 +933,7 @@ GROUP BY ()
 | Type | Hierarchical | All combinations |
 | Output | Less rows | More rows |
 
----
+
 
 #  5. PIVOT
 
@@ -960,7 +941,7 @@ GROUP BY ()
 
 Turns rows into columns.
 
----
+
 
 ## Example
 
@@ -983,7 +964,7 @@ PIVOT (
 | khalid      | column |
 | omar        | column |
 
----
+
 
 ## Result shape
 
@@ -1008,14 +989,14 @@ PIVOT (
 ) AS pvt;
 ```
 
----
+
 
 ##  Why subquery?
 
 Because:
 > PIVOT requires a clean dataset format
 
----
+
 
 # 7. UNPIVOT
 
@@ -1024,7 +1005,6 @@ Because:
 Opposite of PIVOT:
 > Converts columns → rows
 
----
 
 ## Example
 
@@ -1036,7 +1016,7 @@ UNPIVOT (
 ) AS unpvt;
 ```
 
----
+
 
 ##  Meaning
 
@@ -1046,14 +1026,14 @@ UNPIVOT (
 | khalid | row |
 | ali | row |
 
----
+
 
 ## Result shape
 
 | productid | sal | qty |
 |----------|-----|-----|
 
----
+
 
 #  Summary Table
 
@@ -1065,4 +1045,4 @@ UNPIVOT (
 | PIVOT | rows → columns |
 | UNPIVOT | columns → rows |
 
----
+
